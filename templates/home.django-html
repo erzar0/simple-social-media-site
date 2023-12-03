@@ -1,0 +1,9 @@
+{% extends 'base.django-html' %} {% block title %} Home {% endblock %} {% block content
+%}
+<h2>Home</h2>
+{% if not session["username"] %}
+<p><a href="{{ url_for('register') }}">Register</a></p>
+<p><a href="{{ url_for('login') }}">Login</a></p>
+{% else %}
+<p>Welcome, {{ session['username'] }}!</p>
+{% endif %} {% endblock %}

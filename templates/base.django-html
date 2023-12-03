@@ -12,13 +12,12 @@
   <body>
     <header>
       <h1>{% block header %}FaceTwitInstaSnapTok{% endblock %}</h1>
-      {% if session['username'] %}
-      <p>Welcome, {{ session['username'] }}!</p>
-      {% endif %}
+      {% if session['username'] %} {% endif %}
       <nav>
         <ul class="navbar">
           <li><a href="{{ url_for('home') }}">Home</a></li>
           {% if session['username'] %}
+          <li><a href="{{ url_for('users_list') }}">Users</a></li>
           <li><a href="{{ url_for('profile') }}">Profile</a></li>
           <li><a href="{{ url_for('logout') }}">Logout</a></li>
           {% else %}
@@ -29,10 +28,20 @@
       </nav>
     </header>
 
+    {% with messages = get_flashed_messages() %} {% if messages %}
+    <div class="message-container">
+      <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %} {% endwith %}
+
     <section>{% block content %}{% endblock %}</section>
 
     <footer>
-      <p>&copy; 2023 FaceTwitInstaSnapTok</p>
+      <p>&copy; 2023 FaceTwitInstaSnapTok Inc.</p>
     </footer>
   </body>
 </html>

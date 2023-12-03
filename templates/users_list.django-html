@@ -1,0 +1,11 @@
+{% extends 'base.django-html' %} {% block title %} Users {% endblock %} {% block
+content %}
+<h2>Users</h2>
+<ul class="user-list">
+  {% for username in users %}
+  <li>
+    <a href="{{ url_for('profile', username=username) }}">{{ username }}</a>
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}

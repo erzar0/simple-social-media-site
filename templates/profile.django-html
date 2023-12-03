@@ -1,0 +1,18 @@
+{% extends 'base.django-html' %} {% block title %} Profile {% endblock %} 
+{% block content %}
+  <h2>{{ ctx.username }} profile</h2>
+  {% if ctx.is_my_profile %}
+    <p>This is your own profile.</p>
+    <p><a href="{{ url_for('friends', username=ctx.username) }}">Show friends</a></p>
+  {% else %} 
+    {% if ctx.is_friend %} 
+      <form action="{{ url_for('remove_friend', username=ctx.username) }}" method="post">
+        <button type="submit">Remove Friend</button>
+      </form>
+    {% else %}
+      <form action="{{ url_for('add_friend', username=ctx.username) }}" method="post">
+        <button type="submit">Add Friend</button>
+      </form>
+    {% endif %} 
+  {% endif %} 
+{% endblock %}
