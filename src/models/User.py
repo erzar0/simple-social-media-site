@@ -61,7 +61,7 @@ class User:
 
     def get_friend_usernames(self, db):
         query = (
-            "MATCH (user:User {username: $username})-[:FRIENDS_WITH]-(friend:User) "
+            "MATCH (user:User {username: $username})-[:FRIENDS_WITH]->(friend:User) "
             "RETURN friend"
         )
         params = {"username": self.username}

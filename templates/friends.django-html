@@ -1,10 +1,10 @@
 {% extends 'base.django-html' %} {% block title %} Users {% endblock %} {% block
 content %}
 <h2>Friends of {{ctx.username}}</h2>
-<ul class>
+<ul class="user-list">
   {% for username in ctx.friends %}
   <li>
-    <span>
+    <span class="user-info">
       <a href="{{ url_for('profile', username=username) }}">{{username}}</a>
       <form action="{{ url_for('remove_friend', username=username) }}" method="post">
         <button type="submit">Remove Friend</button>
