@@ -5,5 +5,40 @@
 <p><a href="{{ url_for('register') }}">Register</a></p>
 <p><a href="{{ url_for('login') }}">Login</a></p>
 {% else %}
-<p>Welcome, {{ session['username'] }}!</p>
+    <form action="{{ url_for('add_post') }}" method="post">
+        <h1>Create a New Post</h1>
+        <textarea name="content" rows="4" cols="50" required></textarea>
+        <br>
+        <input type="submit" value="Post">
+    </form>
+    {% if ctx.posts %}
+        <ul class="post-list">
+            {% for post in ctx.posts %}
+                <li class="post">
+                    <div class="post-content">
+                        <p>{{ post.content }}</p>
+                        <small>Post by {{ post.username }} on {{ post.timestamp }}</small>
+                    </div>
+
+                    <div class="comment-section">
+                        <form class="form-button" method="post" action="{{ url_for('add_comment', post_id=post.id) }}">
+                            <textarea name="comment_content" required></textarea>
+                            <input type="submit" value="Add Comment">
+                        </form>
+
+                        <ul class="comment-list">
+                            {% for comment in post.comments %}
+                                <li class="comment">
+                                    <p>{{ comment['comment'].content }}</p>
+                                    <small>Comment by {{ comment['user'].username }} at {{ comment['comment'].timestamp }}</small>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No posts available.</p>
+    {% endif %}
 {% endif %} {% endblock %}

@@ -3,6 +3,9 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 header {
@@ -48,14 +51,12 @@ footer {
   color: #fff;
   text-align: center;
   padding: 10px;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
+  margin-top: auto; /* Push the footer to the bottom */
 }
 
 .message-container {
   max-width: 400px;
-  margin: 20px auto;
+  margin: 0px auto;
   padding: 15px;
   background-color: #d9edf7;
   border: 1px solid #bce8f1;
@@ -75,7 +76,7 @@ ul,
 }
 
 form {
-  max-width: 400px;
+  width: fit-content;
   margin: auto auto;
   background-color: #fff;
   padding: 20px;
@@ -179,4 +180,88 @@ button:hover {
 
 .form-container form {
   display: inline-block;
+}
+
+.form-button {
+  margin: 0;
+  padding: 0;
+  display: inline-flex;
+}
+
+.header {
+  color: #007bff;
+  text-align: center;
+}
+
+.post-list {
+  list-style: none;
+  padding: 0;
+}
+
+.post {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s;
+}
+
+.post-content {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.post-meta {
+  color: #888;
+  font-size: 12px;
+  margin-top: 10px;
+}
+
+.post-meta:last-child {
+  margin-bottom: 0;
+}
+
+.post:hover {
+  border-color: #007bff;
+}
+
+.link {
+  color: #007bff;
+  text-decoration: none;
+  display: block;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.post-list {
+  list-style: none;
+}
+
+.post {
+  border: 1px solid #ccc;
+  margin-bottom: 20px;
+  padding: 10px;
+}
+
+.post-content {
+  margin-bottom: 10px;
+}
+
+.comment-section {
+  margin-top: 10px;
+}
+
+.comment-list {
+  list-style: none;
+  padding: 0;
+}
+
+.comment {
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  padding: 10px;
 }

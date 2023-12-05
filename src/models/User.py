@@ -1,11 +1,12 @@
 from werkzeug.security import check_password_hash
+from datetime import datetime
+from .Post import Post
 
 class User:
     def __init__(self, username, password_hash):
         self.username = username
         self.password_hash = password_hash
 
-    @staticmethod
     def get_user(db, username):
         query = "MATCH (u:User {username: $username}) RETURN u LIMIT 1"
         result = db.execute_query(query, {"username": username})
@@ -15,7 +16,6 @@ class User:
         else:
             return None
 
-    @staticmethod
     def get_all_usernames(db):
         query = "MATCH (u:User) RETURN u.username AS username"
         result = db.execute_query(query)
@@ -67,4 +67,3 @@ class User:
         params = {"username": self.username}
         result = db.execute_query(query, params)
         return [record['friend']['username'] for record in result]
-

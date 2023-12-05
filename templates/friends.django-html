@@ -1,14 +1,16 @@
 {% extends 'base.django-html' %} {% block title %} Users {% endblock %} {% block
 content %}
-<h2>Friends of {{ctx.username}}</h2>
+<h2>{% if ctx.are_my_friends %}My friends{% else %}Friends of {{ctx.username}}{% endif %}</h2>
 <ul class="user-list">
   {% for username in ctx.friends %}
   <li>
     <span class="user-info">
       <a href="{{ url_for('profile', username=username) }}">{{username}}</a>
-      <form action="{{ url_for('remove_friend', username=username) }}" method="post">
+      {% if ctx.are_my_friends %}
+      <form class="form-button" action="{{ url_for('remove_friend', username=username) }}" method="post">
         <button type="submit">Remove Friend</button>
       </form>
+      {% endif %}
     </span>
   </li>
   {% endfor %}

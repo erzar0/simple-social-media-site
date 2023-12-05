@@ -5,6 +5,7 @@ from flask import (Flask, redirect, render_template, request,
 from neo4j import GraphDatabase
 from werkzeug.security import generate_password_hash
 from src.models.User import User
+from src.models.Post import Post
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -36,21 +37,33 @@ db = Neo4jDB()
 @app.route("/")
 @app.route("/home")
 def home():
-    return render_template("home.django-html")
+    if "username" not in session:
+        latest_posts = []
+    else:
+        latest_posts = Post.get_latest_posts_from_friends(db, session["username"])
+    ctx = {"posts": latest_posts}
+    return render_template("home.django-html", ctx=ctx)
 
 @app.route("/profile/<string:username>")
 @app.route("/profile", defaults={'username': None}) 
 def profile(username):
-    current_user = User.get_user(db, session["username"])
+    if "username" not in session:
+        current_user = None
+    else:
+        current_user = User.get_user(db, session["username"])
 
     is_my_profile = True if (current_user.username == username 
                                 or username is None) else False
     username = username or session["username"]
     is_friend = current_user.is_friend(db, username)
 
+    posts = Post.get_user_posts(db, username)
+    sorted_posts = sorted(posts, key=lambda x: x.timestamp, reverse=True)
+
     ctx = {'username': username 
     , 'is_my_profile': is_my_profile
-    , 'is_friend': is_friend }
+    , 'is_friend': is_friend
+    , 'posts': sorted_posts}
     return render_template("profile.django-html", ctx=ctx)
 
 @app.route("/register", methods=["GET", "POST"])
@@ -128,8 +141,43 @@ def remove_friend(username):
 def friends(username):
     user = User.get_user(db, username)
     friends = user.get_friend_usernames(db)
-    ctx = {"friends": friends, "username": username }
+    are_my_friends = True if (session["username"] == username 
+                                or username is None) else False
+    ctx = {"friends": friends, "username": username, "are_my_friends": are_my_friends}
     return render_template('friends.django-html', ctx=ctx)
+
+@app.route('/add_post', methods=['POST'])
+def add_post():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+
+    username = session['username']
+    content = request.form.get('content')
+
+    if content:
+        post = Post(username, content)
+        post.create(db)
+
+    return redirect(url_for('profile'))
+
+@app.route("/add_comment/<int:post_id>", methods=["POST"])
+def add_comment(post_id):
+    if "username" not in session:
+        flash("You need to be logged in to add a comment.")
+        return redirect(url_for("login")) 
+
+    username = session["username"]
+    content = request.form["comment_content"]
+
+    result = Post.add_comment(db, post_id, username, content)
+
+    if result:
+        flash("Comment added successfully.")
+    else:
+        flash("Failed to add comment. Please try again.")
+
+    return redirect(request.referrer)  
+
 
 if __name__ == '__main__':
    app.run(debug=True)
