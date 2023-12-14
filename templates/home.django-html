@@ -11,6 +11,7 @@
         <br>
         <input type="submit" value="Post">
     </form>
+    <h2>Friends latest posts</h2>
     {% if ctx.posts %}
         <ul class="post-list">
             {% for post in ctx.posts %}

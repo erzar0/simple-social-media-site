@@ -11,7 +11,13 @@
   </head>
   <body>
     <header>
-      <h1>{% block header %}FaceTwitInstaSnapTok<span style="">Welcome {{session["username"]}}</span>{% endblock %}</h1>
+      {% block header %}<h1>FaceTwitInstaSnapTok</h1>
+      {% if session['username'] %}
+      Welcome {{ session["username"] }}!
+      {% else %}
+      Welcome Guest!
+      {% endif %}
+      {% endblock %}
       {% if session['username'] %} {% endif %}
       <nav>
         <ul class="navbar">
